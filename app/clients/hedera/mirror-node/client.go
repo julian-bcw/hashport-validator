@@ -160,13 +160,14 @@ func (c Client) GetSchedule(scheduleID string) (*model.Schedule, error) {
 	if e != nil {
 		return nil, e
 	}
-	if httpResponse.StatusCode >= 400 {
-		return nil, errors.New(fmt.Sprintf(`Failed to execute query: [%s]. Error: [%s]`, query, query))
-	}
 
 	bodyBytes, e := readResponseBody(httpResponse)
 	if e != nil {
 		return nil, e
+	}
+
+	if httpResponse.StatusCode >= 400 {
+		return nil, errors.New(fmt.Sprintf(`Query [%s] resolved with StatusCode [%d]. ResponseBody: [%s]`, query, httpResponse.StatusCode, bodyBytes))
 	}
 
 	var response *model.Schedule
@@ -325,13 +326,14 @@ func (c Client) getAndParse(query string) (*model.Response, error) {
 		return nil, e
 	}
 
+	if httpResponse.StatusCode >= 400 {
+		return nil, errors.New(fmt.Sprintf(`Query [%s] resolved with StatusCode [%d]. ResponseBody: [%s]`, query, httpResponse.StatusCode, bodyBytes))
+	}
+
 	var response *model.Response
 	e = json.Unmarshal(bodyBytes, &response)
 	if e != nil {
 		return nil, e
-	}
-	if httpResponse.StatusCode >= 400 {
-		return response, errors.New(fmt.Sprintf(`Failed to execute query: [%s]. Error: [%s]`, query, response.Status.String()))
 	}
 
 	return response, nil
