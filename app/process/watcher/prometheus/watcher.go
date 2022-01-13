@@ -245,13 +245,6 @@ func setMetrics(
 }
 
 func getAccountBalance(account *model.AccountsResponse) float64 {
-	//accountBalance := float64(account.Balance.Balance)
-	//tinyBarBalance := float64(hedera.NewHbar(accountBalance).AsTinybar())
-	//
-	//log.Infof("The Account with ID [%s] has balance AsTinybar = %f", account.Account, tinyBarBalance)
-	//
-	//return tinyBarBalance
-
 	balance := float64(account.Balance.Balance)
 	log.Infof("The Account with ID [%s] has balance = %f", account.Account, balance)
 
