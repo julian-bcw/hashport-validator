@@ -24,4 +24,18 @@ const (
 	FeeAccountAmountHelp            = "Fee account amount."
 	BridgeAccountAmountName         = "bridge_account_amount"
 	BridgeAccountAmountHelp         = "Bridge account amount."
+	OperatorAccountAmountName       = "operator_account_amount"
+	OperatorAccountAmountHelp       = "Operator account amount."
+	DotSymbol                       = "." //not fit prometheus validation https://github.com/prometheus/common/blob/main/model/metric.go#L97
+	ReplaceDotSymbol                = "_"
+	DotSymbolRep                    = 2
+	AssetMetricsNamePrefix          = "token_id_"
+	AssetMetricsHelpPrefix          = "The total supply of "
+	BridgeAssetMetricsNamePrefix    = "bridge_acc_"
+	BridgeAssetMetricsNameHelp      = "Bridge account balance for "
+	BalanceAssetMetricNamePrefix    = "balance_"
+	BalanceAssetMetricHelpPrefix    = "The balance of "
+	AssetMetricHelpSuffix           = " at router address "
+	CountAssetMetricNamePrefix      = "count_"
+	CountAssetMetricHelpPrefix      = "The count of "
 )

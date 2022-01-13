@@ -72,7 +72,7 @@ func main() {
 	initializeServerPairs(server, services, repositories, clients, configuration)
 
 	//init Prometheus watcher for dashboard metrics
-	initializePrometheusWatcher(server, configuration, clients.MirrorNode)
+	initializePrometheusWatcher(server, configuration, clients.MirrorNode, clients.EVMClients)
 
 	apiRouter := initializeAPIRouter(services)
 
@@ -184,7 +184,12 @@ func initializeServerPairs(server *server.Server, services *Services, repositori
 	server.AddHandler(constants.ReadOnlyTransferSave, rthh.NewHandler(services.transfers))
 }
 
-func initializePrometheusWatcher(server *server.Server, configuration config.Config, client client.MirrorNode) {
+func initializePrometheusWatcher(
+	server *server.Server,
+	configuration config.Config,
+	client client.MirrorNode,
+	EVMClient map[int64]client.EVM,
+) {
 	dashboardPolling := configuration.Node.Clients.MirrorNode.DashboardPolling * time.Minute
 	//skip if there is no config
 	if dashboardPolling == 0 {
@@ -194,7 +199,8 @@ func initializePrometheusWatcher(server *server.Server, configuration config.Con
 		server.AddWatcher(addPrometheusWatcher(
 			dashboardPolling,
 			client,
-			configuration.Bridge))
+			configuration,
+			EVMClient))
 	}
 }
 
@@ -232,14 +238,11 @@ func addConsensusTopicWatcher(configuration *config.Config,
 		configuration.Node.Clients.Hedera.StartTimestamp)
 }
 
-func addPrometheusWatcher(
-	dashboardPolling time.Duration,
-	client client.MirrorNode,
-	bridgeConfig config.Bridge,
-) *pw.Watcher {
+func addPrometheusWatcher(dashboardPolling time.Duration, client client.MirrorNode, configuration config.Config, EVMClient map[int64]client.EVM) *pw.Watcher {
 	log.Debugf("Added Prometheus Watcher for dashboard metrics")
 	return pw.NewWatcher(
 		dashboardPolling,
 		client,
-		bridgeConfig)
+		configuration,
+		EVMClient)
 }
