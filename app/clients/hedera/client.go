@@ -22,6 +22,7 @@ import (
 	"github.com/hashgraph/hedera-sdk-go/v2"
 	"github.com/limechain/hedera-eth-bridge-validator/app/model/transfer"
 	"github.com/limechain/hedera-eth-bridge-validator/config"
+	"github.com/limechain/hedera-eth-bridge-validator/constants"
 	log "github.com/sirupsen/logrus"
 )
 
@@ -52,6 +53,13 @@ func NewNodeClient(config config.Hedera) *Node {
 	} else {
 		log.Infof("Setting default node rpc urls for [%s].", config.Network)
 	}
+	// Sets a maximum ceiling for unsuccessful transaction submission attempts to
+	// a Hedera Node Address.
+	// If the total attempts to a given node reaches or exceeds constants.MaxNodeSubmissionAttempts,
+	// the target node will be removed from memory and no longer be available for submission to.
+	// Most likely an application restart would be required in order to be added back.
+	// By default, the client does not have a set max node attempts value.
+	client.SetMaxNodeAttempts(constants.MaxNodeSubmissionAttempts)
 
 	accID, err := hedera.AccountIDFromString(config.Operator.AccountId)
 	if err != nil {

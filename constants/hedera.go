@@ -18,6 +18,10 @@ package constants
 
 const Hbar = "HBAR"
 
+// MaxNodeSubmissionAttempts Used as a maximum ceiling for unsuccessful transaction
+// submission attempts to a Hedera Node Address.
+const MaxNodeSubmissionAttempts = 10
+
 // Handler topics
 const (
 	HederaFeeTransfer               = "HEDERA_FEE_TRANSFER"            // WEVM -> NH
