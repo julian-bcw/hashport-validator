@@ -57,9 +57,10 @@ func main() {
 		tx := deserialized.(hedera.TokenUpdateTransaction)
 		transactionResponse, err = tx.Execute(client)
 		break
-	case hedera.AccountUpdateTransaction:
-		tx := deserialized.(hedera.AccountUpdateTransaction)
+	case *hedera.AccountUpdateTransaction:
+		tx := deserialized.(*hedera.AccountUpdateTransaction)
 		transactionResponse, err = tx.Execute(client)
+		tx.GetTransactionValidDuration()
 		break
 	case hedera.TokenCreateTransaction:
 		tx := deserialized.(hedera.TokenCreateTransaction)

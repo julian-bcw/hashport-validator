@@ -89,9 +89,9 @@ func main() {
 		}
 		fmt.Println(hex.EncodeToString(bytes))
 		break
-	case hedera.AccountUpdateTransaction:
-		tx := deserialized.(hedera.AccountUpdateTransaction)
-		ref := &tx
+	case *hedera.AccountUpdateTransaction:
+		tx := deserialized.(*hedera.AccountUpdateTransaction)
+		ref := tx
 		for _, key := range keys {
 			ref = ref.Sign(key)
 		}
