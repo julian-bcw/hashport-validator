@@ -1,8 +1,7 @@
 name: Outdated Dependencies
 
 on:   
-  schedule:
-  - cron: "0 0 1 * *"
+  push
 
 jobs:
   go-mod-outdated:
@@ -13,12 +12,5 @@ jobs:
         name: Setup GO Env
         with:
           go-version: '1.13'
-      - name: Cache Go modules
-        uses: actions/cache@v2
-        with:
-          path: ~/go/pkg/mod
-          key: ${{ runner.os }}-go-${{ secrets.CACHE_VERSION }}-${{ hashFiles('**/go.sum') }}
-          restore-keys: |
-            ${{ runner.os }}-go-
       - name: Run go-mod-outdated
         run: go list -u -m -json all | docker run --rm -i psampaz/go-mod-outdated -update -direct -ci
